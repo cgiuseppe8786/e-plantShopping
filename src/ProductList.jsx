@@ -10,14 +10,13 @@ function ProductList({ onHomeClick }) {
 
     const dispatch = useDispatch();
 
-    // Recupera gli articoli del carrello da Redux
-    const cart = useSelector((state) => state.cart.items);
+    const CartItems = useSelector((state) => state.cart.items);
 
-    // Calcola il numero totale di articoli presenti nel carrello
-    const totalItems = cart.reduce(
-        (total, item) => total + item.quantity,
-        0
-    );
+    const calculateTotalQuantity = () => {
+        return CartItems
+            ? CartItems.reduce((total, item) => total + item.quantity, 0)
+            : 0;
+    };
 
     const plantsArray = [
         {
@@ -253,12 +252,12 @@ function ProductList({ onHomeClick }) {
     // Aggiunge una pianta al carrello Redux
     const handleAddToCart = (product) => {
         dispatch(addItem(product));
-
+    
         setAddedToCart((prevState) => ({
             ...prevState,
             [product.name]: true,
         }));
-    };
+    }
 
     const handleHomeClick = (e) => {
         e.preventDefault();
@@ -352,7 +351,7 @@ function ProductList({ onHomeClick }) {
                                 </svg>
 
                                 <span className="cart_quantity_count">
-                                    {totalItems}
+                                    {calculateTotalQuantity()}
                                 </span>
 
                             </h1>
